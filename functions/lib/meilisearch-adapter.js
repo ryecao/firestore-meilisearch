@@ -89,7 +89,8 @@ function adaptFieldsForMeilisearch(document, rawFieldsToIndex) {
             }
         }
         else if (currentField === '_geo') {
-            return doc;
+            // This is needed for the _geo field to be indexed in Meilisearch
+            return { ...doc, [currentField]: value };
         }
         return { ...doc, [currentField]: value };
     }, {});

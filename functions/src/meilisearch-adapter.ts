@@ -79,7 +79,6 @@ export function adaptFieldsForMeilisearch(
 
   return Object.keys(document).reduce((doc, currentField) => {
     const value = document[currentField]
-
     if (!isAFieldToIndex(fieldsToIndex, currentField)) return doc
     if (value instanceof firestore.GeoPoint) {
       if (currentField === '_geo') {
@@ -92,7 +91,8 @@ export function adaptFieldsForMeilisearch(
         infoGeoPoint(false)
       }
     } else if (currentField === '_geo') {
-      return doc
+      // This is needed for the _geo field to be indexed in Meilisearch
+      return { ...doc, [currentField]: value }
     }
     return { ...doc, [currentField]: value }
   }, {})
